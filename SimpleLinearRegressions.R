@@ -236,8 +236,6 @@ nested2=update(my.lm.treatment_170d, data=my.lm.g_02$model)
 lrtest(my.lm.g_02, nested2) #nested model vs 170d
 nested3=update(my.lm.treatment_200d, data=my.lm.g_02$model)
 lrtest(my.lm.g_02, nested3) #nested model vs 200d
-nested4=update(my.lm.bodysize_02, data=my.lm.g_02$model)
-lrtest(my.lm.g_02, nested4) #nested model vs 0-2d
 
 #degrowth 2-21
 
