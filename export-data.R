@@ -1,7 +1,7 @@
 library(ggplot2)
 
 # read data
-df = read.csv2("ALLDATA_bodysize.csv")
+df = read.csv2("Data/ALLDATA_bodysize.csv")
 
 # summary plot
 ggplot(df, aes(x=day,y=log(mm2))) + geom_point() + facet_wrap(~experiment)
