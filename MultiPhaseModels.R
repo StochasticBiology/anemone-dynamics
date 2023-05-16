@@ -132,7 +132,7 @@ for(expt in 1:8) {
   for(model.type in 1:4)
   { 
     # bootstrap
-    for(nboot in 1:3) #1:100 for plotting less messy figures
+    for(nboot in 1:300) #1:100 for plotting less messy figures
     {
       # for the first sample, retain original data, otherwise sample with replacement
       if(nboot == 1) {  boot = 1:length(y) }
