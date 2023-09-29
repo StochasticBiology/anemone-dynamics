@@ -14,6 +14,8 @@ The first set of code explores linear relationships and relatively simple dynami
 
 `MultiPhaseModels.R` fits changepoint-style models to the multi-phase experiments and performs bootstrapping for uncertainty quantification. This, because of the bootstrapping, takes a while. Its output also requires some manual work -- different experiments are analysed in the code, and the current version requires the filename for each experiment to be specified manually (see code comments). To address this, the Jupyter notebook by default reads precomputed output from the `Precomputed` directory.
 
+`post-review.R` analyses data from new experiments in response to peer review comments.
+
 Simulated annealing fits
 ====
 
