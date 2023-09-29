@@ -33,4 +33,6 @@ write.table(data.frame(x=sub$day, y=log(sub$mm2)), "data-200d.txt", row.names=FA
 sub = df[df$experiment=="21d_starving" & !is.na(df$mm2),]
 write.table(data.frame(x=sub$day, y=log(sub$mm2)), "data-21d.txt", row.names=FALSE, col.names=FALSE)
 
+sub = df[df$experiment=="21d_starving_new" & !is.na(df$mm2),]
+write.table(data.frame(x=sub$day, y=log(sub$mm2)), "data-21d-sep23.txt", row.names=FALSE, col.names=FALSE)
 

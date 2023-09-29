@@ -16,3 +16,5 @@ gcc -o3 optim-csv.c -lm -o optim-csv.ce
 
 ./optim-csv.ce data-170d-170.txt 0.1 0 > tmp10 &
 ./optim-csv.ce data-170d-200.txt 0.1 0 > tmp11 &
+
+./optim-csv.ce data-21d-sep23.txt 0.1 0 > tmp12 &
