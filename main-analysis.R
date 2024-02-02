@@ -82,6 +82,60 @@ ggplot(df.all, aes(x=day,y=log(mm2))) + geom_point() + facet_wrap(~experiment, s
 # summary plot Aiptasia
 ggplot(df.aip, aes(x=day,y=log(mm2))) + geom_point() + facet_wrap(~symbiosis, scales="free_x")
 
+############ new post-review section: growth rate with body size
+
+# assign new labels to individuals that pulls the final element from the current label
+# e.g. S_1_01 -> 01; S_21d_24 -> 24
+df.new$i.label = ""
+for(i in 1:nrow(df.new)) {
+  ss = strsplit(df.new$individual[i], split="_")[[1]]
+  df.new$i.label[i] = ss[length(ss)]
+}
+
+df.new$lin.rate = NA
+df.new$exp.rate = NA
+expts = unique(df.new$experiment)
+# loop over different experiments (growth, shrinkage old/new)
+for(expt in expts) {
+  for(i in 1:nrow(df.new)) {
+    if(df.new$experiment[i] == expt) {
+      # get the set of rows in this experiment that correspond to the time series for this individual
+      this.one = df.new$i.label[i]
+      this.one.refs = which(df.new$experiment == expt & df.new$i.label == this.one)
+      # get the set of future times for this individual
+      future.refs = this.one.refs[which(this.one.refs > i)]
+      if(length(future.refs) > 0) {
+        # estimate growth rate by comparing with the closest future datapoint
+        future.ref = future.refs[1]
+        timediff = df.new$day[future.ref]-df.new$day[i]
+        
+        # linear difference -- simple s2-s1
+        lin.sizediff = df.new$mm2[future.ref]-df.new$mm2[i]
+        # exponential difference:
+        # s2 = s0 exp(a t2), s1 = s0 exp(a t1)
+        # s2/s1 = exp(a(t2-t1))
+        # log s2/s1 = a (t2-t1)
+        exp.sizediff = log(df.new$mm2[future.ref]/df.new$mm2[i])
+        
+        df.new$lin.rate[i] = lin.sizediff/timediff
+        df.new$exp.rate[i] = exp.sizediff/timediff
+      }
+    }
+  }
+}
+
+# compare absolute (less relevant) and exponential (more relevant) behaviours
+ggarrange(ggplot(df.new, aes(x=mm2, y=lin.rate)) + geom_point() + geom_smooth(method="lm") + facet_wrap(~ experiment),
+          ggplot(df.new, aes(x=mm2, y=exp.rate)) + geom_point() + geom_smooth(method="lm") + facet_wrap(~ experiment),
+          nrow=2)
+
+# look at relationships after different time periods post-treatment
+ggarrange( 
+  ggplot(df.new[df.new$experiment != "shrinkage_old",], aes(x=mm2, y=exp.rate, color=factor(day), fill=factor(day))) + geom_point() + geom_smooth(method="lm", alpha=0.25) + facet_wrap(~ experiment) + xlim(0,8) + labs(x="Body size / mm2", y="Rate of exponential dynamics"),
+  ggplot(df.new[df.new$experiment != "shrinkage_old",], aes(x=mm2, y=exp.rate)) + geom_point() + geom_smooth(method="lm", alpha=0.25) + facet_wrap(~ experiment) + xlim(0,8) + labs(x="Body size / mm2", y="Rate of exponential dynamics"),
+  nrow=2
+)
+
 ############ standalone tables
 
 ###### Table 1 -- linear model stats for growth behaviours
